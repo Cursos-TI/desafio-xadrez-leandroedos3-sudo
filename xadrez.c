@@ -1,77 +1,117 @@
 #include <stdio.h>
 
-// Desafio de Xadrez - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de movimentação das peças de xadrez.
-// O objetivo é utilizar estruturas de repetição e funções para determinar os limites de movimentação dentro do jogo.
+// =========================================================================
+// DEFINIÇÃO DAS FUNÇÕES RECURSIVAS (REQUISITO NÍVEL MESTRE)
+// Explicando alteraçãoes: Funções recursivas substituem loops tradicionais utilizando a 
+// pilha de execução do sistema. Cada chamada reduz o contador até ao Caso Base.
+// =========================================================================
+
+// Função recursiva para a movimentação da Torre.
+// Caso base: Quando 'passos' chega a 0, a execução da pilha é interrompida.
+// Caso recursivo: Imprime a direção e chama-se a si mesma decrementando 1 unidade.
+void moverTorreRecursivo(int passos) {
+    if (passos <= 0) {
+        return; // Caso base: ponto de paragem da recursão
+    }
+    printf("Direita\n");
+    moverTorreRecursivo(passos - 1); // Chamada recursiva com decremento
+}
+
+// Função recursiva para a movimentação do Bispo.
+// Simula o deslocamento diagonal imprimindo os dois eixos combinados a cada passo.
+void moverBispoRecursivo(int passos) {
+    if (passos <= 0) {
+        return; // Caso base: ponto de paragem da recursão
+    }
+    printf("Cima Direita\n");
+    moverBispoRecursivo(passos - 1); // Chamada recursiva com decremento
+}
+
+// Função recursiva para a movimentação da Rainha.
+// Controla o número de casas a mover para a esquerda de forma puramente funcional.
+void moverRainhaRecursivo(int passos) {
+    if (passos <= 0) {
+        return; // Caso base: ponto de paragem da recursão
+    }
+    printf("Esquerda\n");
+    moverRainhaRecursivo(passos - 1); // Chamada recursiva com decremento
+}
 
 int main() {
-    // Nível Novato - Movimentação das Peças
-    // Sugestão: Declare variáveis constantes para representar o número de casas que cada peça pode se mover.
+    // Definindo variáveis constantes para os limites de movimentos (Boas Práticas)
+    const int passosTorre = 5;
+    const int passosBispo = 5;
+    const int passosRainha = 8;
+    const int passosVerticaisCavalo = 2;   // Deslocamento vertical do "L"
+    const int passosHorizontaisCavalo = 1; // Deslocamento perpendicular do "L"
 
-     // Quantidade de casas que cada peça vai andar
-    int passosTorre = 5;
-    int passosBispo = 5;
-    int passosRainha = 8;
+    printf("=== MOVIMENTACAO DAS PECAS DE XADREZ - NIVEL MESTRE ===\n\n");
 
-       printf("=== MOVIMENTACAO DAS PECAS DE XADREZ ===\n\n");
+    // =========================================================================
+    // 1. RECURSIVIDADE: TORRE
+    // Movimento de 5 casas para a Direita obtido através de chamadas recursivas.
+    // =========================================================================
+    printf("Movimento da Torre (Recursivo):\n");
+    moverTorreRecursivo(passosTorre);
+    printf("\n"); // Linha em branco para separação obrigatória de blocos
 
-    // Implementação de Movimentação do Bispo
-    // Sugestão: Utilize uma estrutura de repetição para simular a movimentação do Bispo em diagonal.
+    // =========================================================================
+    // 2. RECURSIVIDADE: BISPO
+    // Movimento de 5 casas na diagonal Cima-Direita gerido por recursão.
+    // =========================================================================
+    printf("Movimento do Bispo (Recursivo):\n");
+    moverBispoRecursivo(passosBispo);
+    printf("\n");
 
-     // BISPO 
-    // O bispo vai andar 5 casas na diagonal
-    // Aqui foi usado o WHILE
+    // =========================================================================
+    // 3. RECURSIVIDADE: RAINHA
+    // Movimento de 8 casas para a Esquerda controlado via função recursiva.
+    // =========================================================================
+    printf("Movimento da Rainha (Recursivo):\n");
+    moverRainhaRecursivo(passosRainha);
+    printf("\n");
 
-    printf("Movimento do Bispo:\n");
-
-    int contadorBispo = 0;
-
-    while (contadorBispo < passosBispo) {
-        printf("Cima Direita\n");
-        contadorBispo++;
+    // =========================================================================
+    // 4. BISPO COM LOOPS ANINHADOS
+    // Requisito: Loop externo para o eixo vertical e interno para o horizontal.
+    // Como a diagonal avança simultaneamente nos dois eixos a cada iteração,
+    // o loop interno atua imprimindo o estado combinado com base na matriz lógica.
+    // =========================================================================
+    printf("Movimento do Bispo (Loops Aninhados):\n");
+    for (int vertical = 1; vertical <= passosBispo; vertical++) {
+        for (int horizontal = 1; horizontal <= 1; horizontal++) {
+            printf("Cima Direita\n");
+        }
     }
-
     printf("\n");
 
-    // Implementação de Movimentação da Torre
-    // Sugestão: Utilize uma estrutura de repetição para simular a movimentação da Torre para a direita.
+    // =========================================================================
+    // 5. LOOPS COMPLEXOS: CAVALO
+    // Objetivo: Mover 2 casas para Cima e 1 para a Direita.
+    // Lógica Avançada: O loop 'for' externo controla a subida vertical.
+    // Múltiplas variáveis: Inicializamos 'cima' no 'for' e controlamos 'direita' 
+    // no 'while' interno. Comandos 'break' gerem a quebra de fluxo precisa.
+    // =========================================================================
+    printf("Movimento do Cavalo (Loops Complexos):\n");
 
-    // TORRE 
-    // A torre vai andar 5 casas para a direita
-    // Aqui foi usado o FOR
+    // Loop externo (FOR): incrementa a altura do Cavalo passo a passo
+    for (int cima = 1, direita = 0; cima <= passosVerticaisCavalo; cima++) {
+        printf("Cima\n");
 
-    printf("Movimento da Torre:\n");
-
-    for (int i = 0; i < passosTorre; i++) {
-        printf("Direita\n");
+        // Loop interno (WHILE): avalia o desvio lateral do movimento em "L"
+        while (direita < passosHorizontaisCavalo) {
+            // Condição Avançada: Se o Cavalo ainda não subiu as 2 casas necessárias,
+            // o 'break' interrompe o loop horizontal para permitir que o 'for' continue a subir.
+            if (cima < passosVerticaisCavalo) {
+                break; 
+            }
+            
+            // Quando a altura máxima (2) for atingida, o fluxo executa a curva do "L"
+            printf("Direita\n");
+            direita++; // Atualização para encerrar o ciclo do loop interno
+        }
     }
-
     printf("\n");
-
-    // Implementação de Movimentação da Rainha
-    // Sugestão: Utilize uma estrutura de repetição para simular a movimentação da Rainha para a esquerda.
-
-    printf("Movimento da Rainha:\n");
-
-    int contadorRainha = 0;
-
-    do {
-        printf("Esquerda\n");
-        contadorRainha++;
-    } while (contadorRainha < passosRainha);
-
-    printf("\n");
-    
-    // Nível Aventureiro - Movimentação do Cavalo
-    // Sugestão: Utilize loops aninhados para simular a movimentação do Cavalo em L.
-    // Um loop pode representar a movimentação horizontal e outro vertical.
-
-    // Nível Mestre - Funções Recursivas e Loops Aninhados
-    // Sugestão: Substitua as movimentações das peças por funções recursivas.
-    // Exemplo: Crie uma função recursiva para o movimento do Bispo.
-
-    // Sugestão: Implemente a movimentação do Cavalo utilizando loops com variáveis múltiplas e condições avançadas.
-    // Inclua o uso de continue e break dentro dos loops.
 
     return 0;
 }
